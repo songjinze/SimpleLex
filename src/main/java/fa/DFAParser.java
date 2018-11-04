@@ -23,11 +23,43 @@ public class DFAParser {
         Set<NFAState> startNFAState=getNullColsure(startStateSet);
         DFAState startDFAState=new DFAState(0,startNFAState,false);
         resDFA.setStartState(startDFAState);
-        // 循环获得每个状态
-        while(!isFinish){
 
+        // 循环完成每个状态，从起始状态开始
+        Set<DFAState> stateToComplete=new HashSet<DFAState>();
+        stateToComplete.add(startDFAState);
+        int idCount=1;
+        while(!isFinish){
+            Set<DFAState> newStates=new HashSet<DFAState>();
+            for(DFAState dfaState:stateToComplete){
+                resDFA.addState(dfaState);
+                for(String str:inputStrings){
+                    Set<NFAState> mov=getMov(dfaState.getNFAStates(),str);
+                    Set<NFAState> dtran=getNullColsure(mov);
+                    Set<DFAState> dfaStates=resDFA.getStates();
+                    boolean isDuplicate=false;
+                    for(DFAState tempDfaState:dfaStates){
+                        Set<NFAState> tempNFAStates=tempDfaState.getNFAStates();
+                        if(dtran.containsAll(tempNFAStates)&&dtran.size()==tempNFAStates.size()){
+                            dfaState.addTran(str,tempDfaState.getStateId());
+                            isDuplicate=true;
+                            break;
+                        }
+                    }
+                    if(!isDuplicate){
+                        boolean isFinishState=dtran.contains(nfa.getEndNFAState());
+                        DFAState newState=new DFAState(idCount,dtran,isFinish);
+                        if(isFinishState){
+                            resDFA.setFinishState(newState);
+                        }
+                        idCount++;
+                        newStates.add(newState);
+                    }
+                }
+            }
+            isFinish=newStates.isEmpty();
+            stateToComplete=newStates;
         }
-        return null;
+        return resDFA;
     }
 
     /**
@@ -39,7 +71,12 @@ public class DFAParser {
         Set<NFAState> nfaStates=nfa.getNFAStateList();
         Set<String> res=new HashSet<String>();
         for(NFAState nfaState:nfaStates){
-
+            List<String> inputStrings=nfaState.getNextStrings();
+            for(String str:inputStrings){
+                if(str!=null){
+                    res.add(str);
+                }
+            }
         }
         return res;
     }
