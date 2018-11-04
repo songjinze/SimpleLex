@@ -1,20 +1,18 @@
 package fa.util;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class NFA {
 
     private NFAState startNFAState;
     private NFAState currentNFAState;
     private NFAState endNFAState;
-    private List<NFAState> NFAStateList;
+    private Set<NFAState> NFAStateList;
     public NFA(){
         startNFAState =new NFAState(new ArrayList<String>(),new ArrayList<NFAState>());
         currentNFAState = startNFAState;
         endNFAState = startNFAState;
-        NFAStateList =new LinkedList<NFAState>();
+        NFAStateList =new HashSet<NFAState>();
         NFAStateList.add(startNFAState);
     }
     public NFAState getStartNFAState(){
@@ -37,7 +35,7 @@ public class NFA {
     public void setCurrentNFAState(NFAState currentNFAState){
         this.currentNFAState = currentNFAState;
     }
-    public List<NFAState> getNFAStateList(){
+    public Set<NFAState> getNFAStateList(){
         return NFAStateList;
     }
     public void addNewNode(NFAState index, NFAState newNFAState, String parse){

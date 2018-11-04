@@ -4,21 +4,21 @@ import java.util.List;
 import java.util.Set;
 
 public class DFAState {
-    private char stateId;
+    private int stateId;
     private List<TranTable> tranTables;
-    private Set<Integer> NFAStates;
+    private Set<NFAState> NFAStates;
     private boolean isFinish;
 
-    public DFAState(char stateId,Set<Integer> NFAStates,boolean isFinish){
+    public DFAState(int stateId,Set<NFAState> NFAStates,boolean isFinish){
         this.stateId=stateId;
         this.NFAStates=NFAStates;
         this.isFinish=isFinish;
     }
-    public void addTran(String input,char toStateId){
+    public void addTran(String input,int toStateId){
         tranTables.add(new TranTable(input,toStateId));
     }
 
-    public char getStateId() {
+    public int getStateId() {
         return stateId;
     }
 
@@ -26,14 +26,14 @@ public class DFAState {
         return tranTables;
     }
 
-    public Set<Integer> getNFAStates() {
+    public Set<NFAState> getNFAStates() {
         return NFAStates;
     }
 
     class TranTable{
         String input;
-        char toStateId;
-        TranTable(String input,char toStateId){
+        int toStateId;
+        TranTable(String input,int toStateId){
             this.input=input;
             this.toStateId=toStateId;
         }
