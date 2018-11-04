@@ -1,20 +1,20 @@
 package fa;
 
-import fa.util.DFAState;
-import fa.util.NFAState;
+import fa.util.DFA;
+import fa.util.NFA;
 
 import java.util.List;
 
 public class FAServiceImpl implements FAService {
-    public NFAState getNFAByRE(String re) {
+    public NFA getNFAByRE(String re) {
         return null;
     }
 
-    public DFAState getDFAByNFA(NFAState nfaState) {
+    public DFA getDFAByNFA(NFA nfa) {
         return null;
     }
 
-    public List<String> getTokens(List<DFAState> DFAs, String inputString) {
+    public List<String> getTokens(List<DFA> DFAs, String inputString) {
         return null;
     }
 }

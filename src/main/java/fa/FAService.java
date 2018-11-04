@@ -1,7 +1,7 @@
 package fa;
 
-import fa.util.DFAState;
-import fa.util.NFAState;
+import fa.util.DFA;
+import fa.util.NFA;
 
 import java.util.List;
 
@@ -12,14 +12,14 @@ public interface FAService {
      * @param re
      * @return
      */
-    NFAState getNFAByRE(String re);
+    NFA getNFAByRE(String re);
 
     /**
      * 通过NFA得到DFA
-     * @param nfaState
+     * @param nfa
      * @return
      */
-    DFAState getDFAByNFA(NFAState nfaState);
+    DFA getDFAByNFA(NFA nfa);
 
     /**
      * 使用一组DFA进行词法分析分析词法单元
@@ -27,6 +27,6 @@ public interface FAService {
      * @param inputString
      * @return
      */
-    List<String> getTokens(List<DFAState> DFAs,String inputString);
+    List<String> getTokens(List<DFA> DFAs, String inputString);
 
 }

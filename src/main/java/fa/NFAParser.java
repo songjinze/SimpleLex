@@ -1,44 +1,42 @@
 package fa;
 
+import fa.util.NFA;
 import fa.util.NFAState;
-import fa.util.Node;
-
-import java.util.ArrayList;
 
 public class NFAParser {
-    public NFAState getNFAByNormalRE(String normalRE){
-        NFAState nfaState=new NFAState();
+    public NFA getNFAByNormalRE(String normalRE){
+        NFA nfa =new NFA();
         int currentIndex=0;
         int length=normalRE.length();
-        NFAState preState=nfaState;
+        NFA preState= nfa;
         while(currentIndex<length){
             char c=normalRE.charAt(currentIndex);
             switch (c){
                 case '*':
-                    NFAState temp=new NFAState();
-                    preState.getEndNode().addNewLink(null,preState.getStartNode());
+                    NFA temp=new NFA();
+                    preState.getEndNFAState().addNewLink(null,preState.getStartNFAState());
                     temp.linkTwoNFA(preState);
-                    Node newEndNode=new Node();
-                    temp.addNewNode(temp.getEndNode(),newEndNode,null);
-                    temp.setEndNode(newEndNode);
-                    temp.getStartNode().addNewLink(null,newEndNode);
+                    NFAState newEndNFAState =new NFAState();
+                    temp.addNewNode(temp.getEndNFAState(), newEndNFAState,null);
+                    temp.setEndNFAState(newEndNFAState);
+                    temp.getStartNFAState().addNewLink(null, newEndNFAState);
                     preState=temp;
                     break;
                 case '|':
-                    nfaState.linkTwoNFA(preState);
-                    NFAState tempState1=nfaState;
-                    NFAState tempState2=getNFAByNormalRE(normalRE.substring(currentIndex+1));
-                    Node newTwoEndNode=new Node();
-                    nfaState=new NFAState();
-                    nfaState.linkTwoNFA(tempState1);
-                    nfaState.getEndNode().addNewLink(null,newTwoEndNode);
-                    nfaState.setEndNode(nfaState.getStartNode());
-                    nfaState.linkTwoNFA(tempState2);
-                    nfaState.addNewNode(nfaState.getEndNode(),newTwoEndNode,null);
-                    nfaState.setEndNode(newTwoEndNode);
+                    nfa.linkTwoNFA(preState);
+                    NFA tempState1= nfa;
+                    NFA tempState2=getNFAByNormalRE(normalRE.substring(currentIndex+1));
+                    NFAState newTwoEndNFAState =new NFAState();
+                    nfa =new NFA();
+                    nfa.linkTwoNFA(tempState1);
+                    nfa.getEndNFAState().addNewLink(null, newTwoEndNFAState);
+                    nfa.setEndNFAState(nfa.getStartNFAState());
+                    nfa.linkTwoNFA(tempState2);
+                    nfa.addNewNode(nfa.getEndNFAState(), newTwoEndNFAState,null);
+                    nfa.setEndNFAState(newTwoEndNFAState);
                     break;
                 case '(':
-                    nfaState.linkTwoNFA(preState);
+                    nfa.linkTwoNFA(preState);
                     int tempIndex=currentIndex+1;
                     while(normalRE.charAt(tempIndex)!=')'){
                         tempIndex++;
@@ -47,15 +45,15 @@ public class NFAParser {
                     currentIndex=tempIndex+1;
                     break;
                 default:
-                    nfaState.linkTwoNFA(preState);
-                    preState=new NFAState();
-                    Node newNode=new Node();
-                    preState.addNewNode(preState.getStartNode(),newNode,c+"");
-                    preState.setEndNode(newNode);
+                    nfa.linkTwoNFA(preState);
+                    preState=new NFA();
+                    NFAState newNFAState =new NFAState();
+                    preState.addNewNode(preState.getStartNFAState(), newNFAState,c+"");
+                    preState.setEndNFAState(newNFAState);
                     break;
             }
-            nfaState.linkTwoNFA(preState);
+            nfa.linkTwoNFA(preState);
         }
-        return nfaState;
+        return nfa;
     }
 }
