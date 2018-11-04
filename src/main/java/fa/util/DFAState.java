@@ -30,6 +30,9 @@ public class DFAState {
         return NFAStates;
     }
 
+    public boolean isFinish(){
+        return isFinish;
+    }
     class TranTable{
         String input;
         int toStateId;
@@ -39,4 +42,12 @@ public class DFAState {
         }
     }
 
+    public int getStateIdByInput(String input){
+        for(TranTable tranTable:tranTables){
+            if(tranTable.input.equals(input)){
+                return tranTable.toStateId;
+            }
+        }
+        return -1;
+    }
 }

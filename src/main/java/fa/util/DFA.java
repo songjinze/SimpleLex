@@ -37,4 +37,13 @@ public class DFA {
     public void setStartState(DFAState startState){
         this.startState=startState;
     }
+
+    public DFAState getStateById(int stateId){
+        for(DFAState dfaState:states){
+            if(dfaState.getStateId()==stateId){
+                return dfaState;
+            }
+        }
+        return null;
+    }
 }
